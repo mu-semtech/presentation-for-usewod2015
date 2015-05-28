@@ -1,0 +1,12 @@
+#start-slide a {
+    color: white;
+}
+
+#start-slide p {
+    color: #777;
+    font-style: italic;    
+}
+
+ul.bulletless {
+    list-style-type: none;
+}
