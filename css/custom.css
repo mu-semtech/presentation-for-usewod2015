@@ -10,3 +10,8 @@
 ul.bulletless {
     list-style-type: none;
 }
+
+#sixty-seconds img {
+    border: none;
+    background-color: inherit;
+}
