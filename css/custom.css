@@ -25,3 +25,42 @@ ul.bulletless {
     border: none;
     background-color: inherit;
 }
+
+.fadebox {
+    position: relative;
+}
+
+.fadebox .fadebox-size {
+    opacity: 0;
+}
+
+.fadebox .fragment.on-focus {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.fadebox .fragment.on-focus.current-fragment {
+    opacity: 1;
+}
+
+.reveal .footer {
+    position: absolute;
+    bottom: 1em;
+    right: 10em;
+    font-size: 0.5em;
+    color: #777;
+    z-index: 100;
+}
+
+.reveal .footer a {
+    color: #777;
+    transition: all 0.25s ease-in-out;
+}
+
+.reveal .footer a:hover {
+    color: #42affa;
+}

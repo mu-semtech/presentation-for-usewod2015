@@ -74,24 +74,49 @@
         </section>
 
         <section>
-          <h1>Teaser</h1>
-          <ul class="fragment">
-            <li>Setup</li>
-            <li>Looks like this</li>
-            <li>And stores its data in this</li>
-          </ul>
+          <section>
+            <h1>Teaser</h1>
+          </section>
+
+          <section>
+            <h2>Setup</h2>
+            <div>
+              <pre><code>
+git clone git@github.com:my-project
+cd my-project                  
+docker-compose up
+              </code></pre>
+            </div>
+          </section>
+          <section>
+            <h2>Looks like</h2>
+            <div>
+              <img src="img/fish.png" />
+            </div>
+          </section>
+          <section>
+            <h2>Content store</h2>
+            <div>
+              <img src="img/virtuoso.png" />
+            </div>
+          </section>
+              
         </section>
 
         <section>
           <section>
             <h1>In 30 seconds</h1>
-            <ul>
-              <li class="fragment">Tiny pieces of software</li>
-              <li class="fragment">Easy to share</li>
-              <li class="fragment">Well-known standards</li>
-              <li class="fragment">Low complexity</li>
-               <li class="fragment">+ tooling</li>
+            <ul class="fragment">
+              <li>Tiny pieces of software</li>
+              <li>Easy to share</li>
+              <li>Well-known standards</li>
+              <li>User facing</li>
+              <li>Triple store</li>
+              <li>Single page app</li>
             </ul>
+          </section>
+          <section>
+            <h1>+ tooling</h1>
           </section>
           <section id="sixty-seconds">
             <h1>In 60 seconds</h1>
@@ -106,8 +131,9 @@
           <section>
             <h2>Why?</h2>
             <ul>
-              <li>Pick the right technology</li>
+              <li>Technology-agnostic</li>
               <li>Code sharing</li>
+              <li>Flexible model</li>
               <li>Data synchronization</li>
             </ul>
           </section>
@@ -115,49 +141,185 @@
             <h2>... and for TenForce?</h2>
             <ul>
               <li>Sales: baby steps into semtech</li>
+              <li>No need to publish content yet</li>
               <li>Quick proof of concept</li>
-              <li>Lower application complexity</li>
+              <li>Structured reuse</li>
             </ul>
           </section>
         </section>
 
-        <section>
-          <section id="in-depth">
+        <section id="in-depth">
+          <section>
             <h1>In depth</h1>
             <img class="fragment" src="img/mu-flow.png" />
           </section>
-        </section>
 
+          <section>
+            <h1>Identifier</h1>
+            <p>Adds <code>MU-SESSION-ID</code> header</p>
+          </section>
+
+          <section>
+            <img src="img/mu-flow.png" />
+          </section>
+
+          <section>
+            <h1>Dispatcher</h1>
+            <p>Connect the microservices</p>
+            <pre><code>
+dispatcher:
+  image: semtech/mu-dispatcher
+  links:
+    - registration:registration
+    - login:login
+    - comments:comments
+    - resource:resource
+  volumes:
+    - config:/config
+            </code></pre>
+          </section>
+          
+          <section>
+            <h1>Dispatcher</h1>
+            <p>Select right microservice</p>
+            <pre><code>
+match "/producers" do
+  Proxy.forward conn, path, "http://resource/producers/"
+end
+
+match "/accounts/*path" do
+  Proxy.forward conn, path, "http://registration/accounts/"
+end
+            </pre></code>
+          </section>
+
+          <section>
+            <img src="img/mu-flow.png" />
+          </section>
+
+          <section>
+            <h1>Resource service</h1>
+            <div class="fadebox">
+              <pre class="fadebox-size"><code>
+(define-resource product-group ()
+  :on-path "product-groups"
+  :class (s-url "http://veeakker.com/vocabulary/shop/ProductGroup")
+  :resource-base (s-prefix "http://veeakker.com/api/product-groups/")
+
+  :properties `((:name :string ,(s-prefix "vshop:productGroupName"))))
+
+  :has-many `((product
+               :via ,(s-prefix "v-shop:hasProduct")
+               :as "products")))
+              </pre></code>
+              <div class="fragment on-focus">
+                <pre><code>
+(define-resource product-group ()
+  :on-path "product-groups"
+  :class (s-url "http://veeakker.com/vocabulary/shop/ProductGroup")
+  :resource-base (s-prefix "http://veeakker.com/api/product-groups/")
+
+  :properties `((:name :string ,(s-prefix "vshop:productGroupName"))))
+
+  :has-many `((product
+               :via ,(s-prefix "v-shop:hasProduct")
+               :as "products")))
+                </pre></code>
+              </div>
+              <div class="fragment on-focus">
+                <pre><code>
+ define-resource product-group
+  :on-path "product-groups"
+  :class        "http://veeakker.com/vocabulary/shop/ProductGroup"
+  :resource-base           "http://veeakker.com/api/product-groups/"
+
+  :properties    :name :string            "vshop:productGroupName"
+
+  :has-many    product
+               :via            "v-shop:hasProduct"
+               :as "products"
+                </pre></code>
+              </div>
+            </div>
+          </section>
+        </section>
         <section>
           <section>
-            <h1>Example &amp; Benefits</h1>
+            <h1>More depth</h1>
           </section>
           <section>
-            
-          </section>
-        </section>
-
-        <section>
-          <section>
-            <h1>Commentary &amp; Future work</h1>
-          </section>
-          <section>
-            <h2>Commentary</h2>
-            <ul>
-              <li>JSON API is a fast-moving target</li>
-              <li>... as are single page apps</li>
+            <h2>Microservice templates</h2>
+            <ul class="fragment">
+              <li>Basic starting point for a new microservice</li>
+              <li>Follows best practices</li>
+              <li>We're eager to include new languages</li>
             </ul>
           </section>
           <section>
-            <h2>Future work</h2>
+            <h2>{ JSON-API }</h2>
+            <ul class="fragment">
+              <li>Community standard JSON format</li>
+              <li>1.0 release two days ago</li>
+              <li>... much in flux before that</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Docker</h2>
+            <ul class="fragment">
+              <li>Easy deployment of services</li>
+              <li>Near-future easy orchestration</li>
+              <li>Big-name corporate backing</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Future vision on web apps</h2>
+            <ul class="fragment">
+              <li>Standardized web-components</li>
+              <li>More frontend code sharing</li>
+              <li>More mashed web apps</li>
+            </ul>
+          </section>
+        </section>
+        <section>
+          <section>
+            <h1>Benefits</h1>
+          </section>
+          <section>
+            <ul>
+              <li>Simple code sharing</li>
+              <li>Small scoped problems</li>
+              <li>Mock-style SPA development</li>
+              <li>Built for the future</li>
+            </ul>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h1>Future work</h1>
             <ul class="bulletless">
               <li><input type="checkbox" checked /> Clean deployment with Docker</li>
               <li><input type="checkbox" /> Analysing query logs</li>
               <li><input type="checkbox" /> Versioned triple store</li>
               <li><input type="checkbox" /> Linked Data Fragments support</li>
             </ul>
+          </section>
+        </section>
+
+        <section>
+          <section>
+            <h1>Need more?</h1>
+          </section>
+          <section>
+            <h1 class="fragment"><a href="http://mu.semte.ch">mu.semte.ch</a><br /> is coming</h1>
+            <p class="fragment">... or try one of erika.pauwels@tenforce.com aad.versteden@tenforce.com @impulsater @tenforce</p>
+          </section>
         </section>
 	  </div>
+
+      <div class="footer">
+        <a href="http://www.tenforce.com">TenForce -- The Pragmatic Company</a>
+      </div>
 
 	</div>
 
