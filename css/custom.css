@@ -11,7 +11,17 @@ ul.bulletless {
     list-style-type: none;
 }
 
-#sixty-seconds img {
+#tenforce table,
+#tenforce table td {
+    border: none;
+}
+
+#tenforce table tr td:first-child {
+    text-align: right;
+}
+
+#sixty-seconds img,
+#in-depth img {
     border: none;
     background-color: inherit;
 }
